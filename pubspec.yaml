@@ -1,6 +1,6 @@
 name: dropdown_selection
 description: frok rom dropdown_search , fix dialog option size not dynamic issue
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/salim-lachdhaf
 git: https://github.com/salim-lachdhaf/searchable_dropdown
 repository: https://github.com/salim-lachdhaf/searchable_dropdown
