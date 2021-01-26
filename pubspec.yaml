@@ -1,6 +1,6 @@
-name: dropdown_search
-description: Simple and robust Searchable Dropdown with item search feature, making it possible to use an offline item list or filtering URL for easy customization.
-version: 0.4.6
+name: dropdown_selection
+description: frok rom dropdown_search , fix dialog option size not dynamic issue
+version: 0.0.1
 homepage: https://github.com/salim-lachdhaf
 git: https://github.com/salim-lachdhaf/searchable_dropdown
 repository: https://github.com/salim-lachdhaf/searchable_dropdown
@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  optional: ^5.0.0+1
 
 dev_dependencies:
   flutter_test:

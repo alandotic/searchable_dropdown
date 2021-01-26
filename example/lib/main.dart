@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_selection/dropdown_selection.dart';
 import 'package:flutter/material.dart';
 
 import 'user_model.dart';
@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
-  final _openDropDownProgKey = GlobalKey<DropdownSearchState<String>>();
+  final _openDropDownProgKey = GlobalKey<DropdownSelectionState<String>>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.all(4),
             children: <Widget>[
               ///Menu Mode with no searchBox
-              DropdownSearch<String>(
+              DropdownSelection<String>(
                 validator: (v) => v == null ? "required field" : null,
                 hint: "Select a country",
                 mode: Mode.MENU,
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 selectedItem: "Brazil",
               ),
               Divider(),
-              DropdownSearch<UserModel>(
+              DropdownSelection<UserModel>(
                 searchBoxController: TextEditingController(text: 'Mrs'),
                 mode: Mode.BOTTOM_SHEET,
                 isFilteredOnline: true,
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(),
 
               ///custom itemBuilder and dropDownBuilder
-              DropdownSearch<UserModel>(
+              DropdownSelection<UserModel>(
                 showSelectedItem: true,
                 compareFn: (UserModel i, UserModel s) => i.isEqual(s),
                 label: "Person",
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(),
 
               ///BottomSheet Mode with no searchBox
-              DropdownSearch<String>(
+              DropdownSelection<String>(
                 mode: Mode.BOTTOM_SHEET,
                 maxHeight: 300,
                 items: ["Brazil", "Italia", "Tunisia", 'Canada'],
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(),
 
               ///merge online and offline data in the same list and set custom max Height
-              DropdownSearch<UserModel>(
+              DropdownSelection<UserModel>(
                 items: [
                   UserModel(name: "Offline name1", id: "999"),
                   UserModel(name: "Offline name2", id: "0101")
@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(),
 
               ///open dropdown programmatically
-              DropdownSearch<String>(
+              DropdownSelection<String>(
                 items: ["no action", "confirm in the next dropdown"],
                 label: "open another dropdown programmatically",
                 onChanged: (String v) {
@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               Padding(padding: EdgeInsets.all(4)),
-              DropdownSearch<String>(
+              DropdownSelection<String>(
                 key: _openDropDownProgKey,
                 items: ["Yes", "No"],
                 label: "confirm",

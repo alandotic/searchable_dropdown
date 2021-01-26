@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../dropdown_search.dart';
+import '../dropdown_selection.dart';
+import 'height_calculating_state.dart';
 
 class SelectDialog<T> extends StatefulWidget {
   final T selectedValue;
@@ -68,7 +69,7 @@ class SelectDialog<T> extends StatefulWidget {
   _SelectDialogState<T> createState() => _SelectDialogState<T>();
 }
 
-class _SelectDialogState<T> extends State<SelectDialog<T>> {
+class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
   final FocusNode focusNode = new FocusNode();
   final StreamController<List<T>> _itemsStream = StreamController();
   final ValueNotifier<bool> _loadingNotifier = ValueNotifier(false);
@@ -102,12 +103,19 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
     bool isTablet = deviceSize.width > deviceSize.height;
-    double maxHeight = deviceSize.height * (isTablet ? .8 : .6);
+    double maxHeight = deviceSize.height * (isTablet ? .8 : .7);
     double maxWidth = deviceSize.width * (isTablet ? .7 : .9);
+
+    /// I limit the max height to the screenHeightFactor of the device
+    double listHeight = widget.maxHeight ?? calculatedHeight.orElse(0);
 
     return Container(
       width: widget.dialogMaxWidth ?? maxWidth,
-      constraints: BoxConstraints(maxHeight: widget.maxHeight ?? maxHeight),
+      height: (listHeight == 0 &&
+                  (widget.isFilteredOnline || widget.onFind != null) ||
+              listHeight > maxHeight)
+          ? maxHeight
+          : listHeight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -268,16 +276,19 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
   void _addDataToStream(List<T> data) {
     if (_itemsStream.isClosed) return;
     _itemsStream.add(data);
+    recalculateHeight();
   }
 
   void _addErrorToStream(Object error, [StackTrace stackTrace]) {
     if (_itemsStream.isClosed) return;
     _itemsStream.addError(error, stackTrace);
+    recalculateHeight();
   }
 
   Widget _itemWidget(T item) {
     if (widget.itemBuilder != null)
       return InkWell(
+        key: addKey(),
         child: widget.itemBuilder(
           context,
           item,
@@ -293,6 +304,7 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
       );
     else
       return ListTile(
+        key: addKey(),
         title: Text(
           widget.itemAsString != null
               ? (widget.itemAsString(item) ?? "")

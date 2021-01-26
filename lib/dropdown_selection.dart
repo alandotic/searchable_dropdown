@@ -28,7 +28,7 @@ typedef Widget LoadingBuilder<T>(BuildContext context, String searchEntry);
 
 enum Mode { DIALOG, BOTTOM_SHEET, MENU }
 
-class DropdownSearch<T> extends StatefulWidget {
+class DropdownSelection<T> extends StatefulWidget {
   ///DropDownSearch label
   final String label;
 
@@ -142,7 +142,7 @@ class DropdownSearch<T> extends StatefulWidget {
   ///text controller to set default search word for example
   final TextEditingController searchBoxController;
 
-  DropdownSearch({
+  DropdownSelection({
     Key key,
     this.onSaved,
     this.validator,
@@ -192,10 +192,10 @@ class DropdownSearch<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  DropdownSearchState<T> createState() => DropdownSearchState<T>();
+  DropdownSelectionState<T> createState() => DropdownSelectionState<T>();
 }
 
-class DropdownSearchState<T> extends State<DropdownSearch<T>> {
+class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
   final ValueNotifier<T> _selectedItemNotifier = ValueNotifier(null);
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
 
