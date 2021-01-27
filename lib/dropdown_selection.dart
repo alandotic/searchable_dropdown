@@ -8,6 +8,8 @@ import 'package:flutter/rendering.dart';
 import 'src/popupMenu.dart';
 import 'src/selectDialog.dart';
 
+export 'src/selectDialog.dart';
+
 typedef Future<List<T>> DropdownSearchOnFind<T>(String text);
 typedef String DropdownSearchItemAsString<T>(T item);
 typedef bool DropdownSearchFilterFn<T>(T item, String filter);
