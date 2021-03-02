@@ -79,8 +79,7 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
   final ValueNotifier<bool> _loadingNotifier = ValueNotifier(false);
   final List<T> _items = List<T>();
   Debouncer _debouncer;
-  var scrollController =
-      ScrollController(initialScrollOffset: 200, keepScrollOffset: false);
+  var scrollController = ScrollController();
 
   @override
   void initState() {
