@@ -79,6 +79,8 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
   final ValueNotifier<bool> _loadingNotifier = ValueNotifier(false);
   final List<T> _items = List<T>();
   Debouncer _debouncer;
+  var scrollController =
+      ScrollController(initialScrollOffset: 200, keepScrollOffset: false);
 
   @override
   void initState() {
@@ -87,7 +89,7 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
 
     Future.delayed(
       Duration.zero,
-          () => manageItemsByFilter(widget.searchBoxController?.text ?? '',
+      () => manageItemsByFilter(widget.searchBoxController?.text ?? '',
           isFistLoad: true),
     );
   }
@@ -146,15 +148,19 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
                           child: const Text("No data found"),
                         );
                     }
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(vertical: 0),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        var item = snapshot.data[index];
-                        return _itemWidget(item);
-                      },
-                    );
+                    return Scrollbar(
+                        controller: scrollController,
+                        isAlwaysShown: true,
+                        child: ListView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(vertical: 0),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            var item = snapshot.data[index];
+                            return _itemWidget(item);
+                          },
+                        ));
                   },
                 ),
                 _loadingWidget()
@@ -238,8 +244,8 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
           return true;
         else if (widget.itemAsString != null) {
           return (widget.itemAsString(i))
-              ?.toLowerCase()
-              ?.contains(filter.toLowerCase()) ??
+                  ?.toLowerCase()
+                  ?.contains(filter.toLowerCase()) ??
               false;
         }
         return false;
@@ -301,12 +307,12 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
           _manageSelectedItemVisibility(item),
         ),
         onTap: widget.itemDisabled != null &&
-            (widget.itemDisabled(item) ?? false) == true
+                (widget.itemDisabled(item) ?? false) == true
             ? null
             : () {
-          Navigator.pop(context, item);
-          if (widget.onChanged != null) widget.onChanged(item);
-        },
+                Navigator.pop(context, item);
+                if (widget.onChanged != null) widget.onChanged(item);
+              },
       );
     else
       return ListTile(
@@ -318,12 +324,12 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
         ),
         selected: _manageSelectedItemVisibility(item),
         onTap: widget.itemDisabled != null &&
-            (widget.itemDisabled(item) ?? false) == true
+                (widget.itemDisabled(item) ?? false) == true
             ? null
             : () {
-          Navigator.pop(context, item);
-          if (widget.onChanged != null) widget.onChanged(item);
-        },
+                Navigator.pop(context, item);
+                if (widget.onChanged != null) widget.onChanged(item);
+              },
       );
   }
 
@@ -359,7 +365,7 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
                       hintText: widget.hintText,
                       border: const OutlineInputBorder(),
                       contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16),
+                          const EdgeInsets.symmetric(horizontal: 16),
                     ),
               ),
             )
