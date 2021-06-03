@@ -50,13 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0-prev3"
-  dropdown_search:
+  dropdown_selection:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.6.1"
+    version: "0.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -95,6 +95,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  optional:
+    dependency: transitive
+    description:
+      name: optional
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0+1"
   path:
     dependency: transitive
     description:

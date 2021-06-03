@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: DropdownSearch<String>(
+                    child: DropdownSelection<String>(
                       validator: (v) => v == null ? "required field" : null,
                       hint: "Select a country",
                       mode: Mode.MENU,

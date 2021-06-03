@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
+
 import 'package:dropdown_selection/src/text_field_props.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +67,6 @@ class SelectDialog<T> extends StatefulWidget {
   /// object that passes all props to search field
   final TextFieldProps? searchFieldProps;
 
-  ///delay before searching
-  final Duration searchDelay;
-
   const SelectDialog({
     Key? key,
     this.popupTitle,
@@ -111,8 +109,8 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
   final StreamController<List<T>> _itemsStream =
       StreamController<List<T>>.broadcast();
   final ValueNotifier<bool> _loadingNotifier = ValueNotifier(false);
-  final List<T> _items = List<T>();
-  Debouncer _debouncer;
+  final List<T> _items = <T>[];
+  late Debouncer _debouncer;
   var scrollController = ScrollController();
 
   @override
@@ -195,9 +193,9 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
                           controller: scrollController,
                           shrinkWrap: true,
                           padding: EdgeInsets.symmetric(vertical: 0),
-                          itemCount: snapshot.data.length,
+                          itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            var item = snapshot.data[index];
+                            var item = snapshot.data![index];
                             return _itemWidget(item);
                           },
                         ));
@@ -359,7 +357,7 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
     if (widget.itemBuilder != null)
       return InkWell(
         key: addKey(),
-        child: widget.itemBuilder(
+        child: widget.itemBuilder!(
           context,
           item,
           _manageSelectedItemVisibility(item),
@@ -374,7 +372,7 @@ class _SelectDialogState<T> extends HeightCalculatingState<SelectDialog<T>> {
         key: addKey(),
         title: Text(
           widget.itemAsString != null
-              ? (widget.itemAsString(item) ?? "")
+              ? (widget.itemAsString!(item))
               : item.toString(),
         ),
         selected: _manageSelectedItemVisibility(item),

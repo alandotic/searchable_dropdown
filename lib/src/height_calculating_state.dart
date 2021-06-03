@@ -19,7 +19,7 @@ abstract class HeightCalculatingState<S extends StatefulWidget>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       Future.delayed(Duration(milliseconds: 100), () {
         calculateHeight();
       });
@@ -37,10 +37,11 @@ abstract class HeightCalculatingState<S extends StatefulWidget>
     if (calculatedHeight.isEmpty) {
       setState(() {
         final listHeight = _keys.fold(0.0, (pv, e) {
-          RenderBox box = e.currentContext.findRenderObject();
+          RenderBox? box = e.currentContext!.findRenderObject() as RenderBox;
           print("box");
 
-          return pv += box.size.height;
+          var height = pv as double;
+          return height += box.size.height;
         });
         calculatedHeight = Optional.of(listHeight);
 

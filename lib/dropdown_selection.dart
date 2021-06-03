@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:dropdown_selection/src/popup_safearea.dart';
@@ -19,16 +18,14 @@ typedef Future<List<T>> DropdownSearchOnFind<T>(String text);
 typedef String DropdownSearchItemAsString<T>(T item);
 typedef bool DropdownSearchFilterFn<T>(T item, String filter);
 typedef bool DropdownSearchCompareFn<T>(T item, T? selectedItem);
-typedef Widget DropdownSearchBuilder<T>(
-    BuildContext context, T? selectedItem, String itemAsString);
-typedef Widget DropdownSearchPopupItemBuilder<T>(
-    BuildContext context,
+typedef Widget DropdownSearchBuilder<T>(BuildContext context, T? selectedItem,
+    String itemAsString);
+typedef Widget DropdownSearchPopupItemBuilder<T>(BuildContext context,
     T item,
-    bool isSelected,
-    );
+    bool isSelected,);
 typedef bool DropdownSearchPopupItemEnabled<T>(T item);
-typedef Widget ErrorBuilder<T>(
-    BuildContext context, String? searchEntry, dynamic exception);
+typedef Widget ErrorBuilder<T>(BuildContext context, String? searchEntry,
+    dynamic exception);
 typedef Widget EmptyBuilder<T>(BuildContext context, String? searchEntry);
 typedef Widget LoadingBuilder<T>(BuildContext context, String? searchEntry);
 typedef Widget IconButtonBuilder(BuildContext context);
@@ -143,9 +140,6 @@ class DropdownSelection<T> extends StatefulWidget {
   ///custom clear button widget builder
   final IconButtonBuilder? clearButtonBuilder;
 
-  ///custom clear button widget builder
-  final IconButtonBuilder clearButtonBuilder;
-
   ///custom dropdown icon button widget
   final Widget? dropDownButton;
 
@@ -159,11 +153,6 @@ class DropdownSelection<T> extends StatefulWidget {
   ///whether to manage the clear and dropdown icons via InputDecoration suffixIcon
   final bool showAsSuffixIcons;
 
-  ///custom dropdown button widget builder
-  final IconButtonBuilder dropdownButtonBuilder;
-
-  ///whether to manage the clear and dropdown icons via InputDecoration suffixIcon
-  final bool showAsSuffixIcons;
 
   ///If true, the dropdownBuilder will continue the uses of material behavior
   ///This will be useful if you want to handle a custom UI only if the item !=null
@@ -209,16 +198,6 @@ class DropdownSelection<T> extends StatefulWidget {
   /// object that passes all props to search field
   final TextFieldProps? searchFieldProps;
 
-  ///called when popup is dismissed
-  final VoidCallback onPopupDismissed;
-
-  /// callback executed before applying value change
-  ///delay before searching, change it to Duration(milliseconds: 0)
-  ///if you do not use online search
-  final Duration searchDelay;
-
-  /// callback executed before applying value change
-  final BeforeChange<T> onBeforeChange;
 
   DropdownSelection({
     Key? key,
@@ -272,14 +251,15 @@ class DropdownSelection<T> extends StatefulWidget {
     this.searchBoxStyle,
     this.popupSafeArea = const PopupSafeArea(),
     this.searchFieldProps,
-  })  : assert(!showSelectedItem || T == String || compareFn != null),
+  })
+      : assert(!showSelectedItem || T == String || compareFn != null),
         super(key: key);
 
   @override
   DropdownSelectionState<T> createState() => DropdownSelectionState<T>();
 }
 
-class DropdownSearchState<T> extends State<DropdownSearch<T>> {
+class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
   final ValueNotifier<T?> _selectedItemNotifier = ValueNotifier(null);
   final ValueNotifier<bool> _isFocused = ValueNotifier(false);
 
@@ -290,7 +270,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
   }
 
   @override
-  void didUpdateWidget(DropdownSearch<T> oldWidget) {
+  void didUpdateWidget( DropdownSelection<T> oldWidget) {
     final oldSelectedItem = oldWidget.selectedItem;
     final newSelectedItem = widget.selectedItem;
     if (oldSelectedItem != newSelectedItem) {
@@ -322,12 +302,15 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
         Expanded(
           child: widget.dropdownBuilder != null
               ? widget.dropdownBuilder!(
-                  context,
-                  data,
-                  _selectedItemAsString(data),
-                )
+            context,
+            data,
+            _selectedItemAsString(data),
+          )
               : Text(_selectedItemAsString(data),
-              style: Theme.of(context).textTheme.subtitle1),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .subtitle1),
         ),
         if (!widget.showAsSuffixIcons) _manageTrailingIcons(data),
       ],
@@ -369,14 +352,16 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
         InputDecoration(
             contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
             border: OutlineInputBorder()))
-        .applyDefaults(Theme.of(state.context).inputDecorationTheme)
+        .applyDefaults(Theme
+        .of(state.context)
+        .inputDecorationTheme)
         .copyWith(
-            enabled: widget.enabled,
-            labelText: widget.label,
-            hintText: widget.hint,
-            suffixIcon:
-                widget.showAsSuffixIcons ? _manageTrailingIcons(data) : null,
-            errorText: state.errorText);
+        enabled: widget.enabled,
+        labelText: widget.label,
+        hintText: widget.hint,
+        suffixIcon:
+        widget.showAsSuffixIcons ? _manageTrailingIcons(data) : null,
+        errorText: state.errorText);
   }
 
   ///function that return the String value of an object
@@ -402,23 +387,23 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
         if (data != null && widget.showClearButton == true)
           widget.clearButtonBuilder != null
               ? GestureDetector(
-                  onTap: clearButtonPressed,
-                  child: widget.clearButtonBuilder!(context),
-                )
+            onTap: clearButtonPressed,
+            child: widget.clearButtonBuilder!(context),
+          )
               : IconButton(
-                  icon: widget.clearButton ?? const Icon(Icons.clear, size: 24),
-                  onPressed: clearButtonPressed,
-                ),
+            icon: widget.clearButton ?? const Icon(Icons.clear, size: 24),
+            onPressed: clearButtonPressed,
+          ),
         widget.dropdownButtonBuilder != null
             ? GestureDetector(
-                onTap: dropdownButtonPressed,
-                child: widget.dropdownButtonBuilder!(context),
-              )
+          onTap: dropdownButtonPressed,
+          child: widget.dropdownButtonBuilder!(context),
+        )
             : IconButton(
-                icon: widget.dropDownButton ??
-                    const Icon(Icons.arrow_drop_down, size: 24),
-                onPressed: dropdownButtonPressed,
-              ),
+          icon: widget.dropDownButton ??
+              const Icon(Icons.arrow_drop_down, size: 24),
+          onPressed: dropdownButtonPressed,
+        ),
       ],
     );
   }
@@ -427,7 +412,9 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
   Future<T?> _openSelectDialog(T? data) {
     return showGeneralDialog(
       barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: MaterialLocalizations
+          .of(context)
+          .modalBarrierDismissLabel,
       transitionDuration: const Duration(milliseconds: 400),
       barrierColor: widget.popupBarrierColor ?? const Color(0x80000000),
       context: context,
@@ -467,11 +454,16 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
                 right: widget.popupSafeArea.right,
                 child: Container(
                   color:
-                      widget.popupBackgroundColor ?? Theme.of(ctx).canvasColor,
+                  widget.popupBackgroundColor ?? Theme
+                      .of(ctx)
+                      .canvasColor,
                   child: AnimatedPadding(
                     duration: Duration(milliseconds: 300),
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(ctx).viewInsets.bottom,
+                      bottom: MediaQuery
+                          .of(ctx)
+                          .viewInsets
+                          .bottom,
                     ),
                     child: _selectDialogInstance(data, defaultHeight: 350),
                   ),
@@ -488,7 +480,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
     final RenderBox popupButtonObject = context.findRenderObject() as RenderBox;
     // Get the render object of the overlay used in `Navigator` / `MaterialApp`, i.e. screen size reference
     final RenderBox overlay =
-        Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    Overlay.of(context)!.context.findRenderObject() as RenderBox;
     // Calculate the show-up area for the dropdown using button's size & position based on the `overlay` used as the coordinate space.
     final RelativeRect position = RelativeRect.fromSize(
       Rect.fromPoints(
@@ -544,7 +536,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
       dialogMaxWidth: widget.dialogMaxWidth,
       itemDisabled: widget.popupItemDisabled,
       searchBoxController:
-          widget.searchBoxController ?? TextEditingController(),
+      widget.searchBoxController ?? TextEditingController(),
       searchDelay: widget.searchDelay,
       showFavoriteItems: widget.showFavoriteItems,
       favoriteItems: widget.favoriteItems,
@@ -625,10 +617,6 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
 
   ///get selected value programmatically
   T? get getSelectedItem => _selectedItemNotifier.value;
-
-  ///check if the dropdownSearch is focused
-  bool get isFocused => _isFocused.value;
-}
 
   ///check if the dropdownSearch is focused
   bool get isFocused => _isFocused.value;
