@@ -12,14 +12,15 @@ description: A new Flutter project.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.10.4 <3.0.0"
 
 dependencies:
-  dio: ^3.0.1
-  dropdown_selection:
-    path: ../
+  dio: ^4.0.0-prev3
+  dropdown_search:
+     path: ../
   flutter:
     sdk: flutter
 
@@ -31,13 +32,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

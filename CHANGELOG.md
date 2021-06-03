@@ -1,10 +1,45 @@
+## [0.6.2] - 2021.05.22
+* prop that passes all props to search field
+
+## [0.6.1] - 2021.05.02
+* added property to set up the popup safe area
+* fixed `null safety` issues
+
+## [0.6.0] - 2021.03.27
+* fixed `null safety` issues after initial migration
+* migrated example to `null safety`
+* allowed `http` traffic for Android to make async requests work
+
+## [0.5.0] - 2021.03.23
+* Migrating to null-safety @thx [nizarhdt](https://github.com/nizarhdt)
+* add new feature: favorites items @thx [nizarhdt](https://github.com/nizarhdt)
+* fix bugs
+
+## [0.4.9] - 2021.02.22
+* fix bug filterOnline [#116](https://github.com/salim-lachdhaf/searchable_dropdown/issues/116)
+* Add onBeforeChange CallBack @thanks [Vasiliy](https://github.com/vasilich6107)
+* Add onPopupDismiss CallBack @thanks [Vasiliy](https://github.com/vasilich6107)
+* search delay feature @thanks [Vasiliy](https://github.com/vasilich6107)
+* BottomSheet scrolling behavior improvement @thanks [Vasiliy](https://github.com/vasilich6107)
+* fix bug update selectedItem
+* added an ability to override the clear and dropdown icon buttons with builder
+* `suffixIcons` adds an ability to switch icon management through the `suffixIcon` of `InputDecoration` 
+
+## [0.4.8] - 2020.11.20
+* fix bug caused by last flutter SDK breaking changes [#69](https://github.com/salim-lachdhaf/searchable_dropdown/issues/69)
+* Add a getter for the selected item
+* Add a getter to check if the DropDownSearch is focused or not
+
+## [0.4.7] - 2020.10.30
+* fix bug default selectedItem [#56](https://github.com/salim-lachdhaf/searchable_dropdown/issues/56)
+
 ## [0.4.6] - 2020.10.30
 * Invoke the dropdown programmatically
 * change dropdownSearch selected value programmatically
-* fix issue #25
-* fix issue #36
-* fix issue #51
-* fix issue #55
+* fix issue [#25](https://github.com/salim-lachdhaf/searchable_dropdown/issues/25)
+* fix issue [#36](https://github.com/salim-lachdhaf/searchable_dropdown/issues/36)
+* fix issue [#51](https://github.com/salim-lachdhaf/searchable_dropdown/issues/51)
+* fix issue [#55](https://github.com/salim-lachdhaf/searchable_dropdown/issues/55)
 
 ## [0.4.5] - 2020.10.21
 * replace autoValidate by autoValidateMode

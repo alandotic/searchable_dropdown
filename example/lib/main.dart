@@ -50,12 +50,105 @@ class _MyHomePageState extends State<MyHomePage> {
                 showClearButton: true,
                 onChanged: print,
                 popupItemDisabled: (String s) => s.startsWith('I'),
-                selectedItem: "Brazil",
+                selectedItem: "Tunisia",
+                onBeforeChange: (a, b) {
+                  if (b == null) {
+                    AlertDialog alert = AlertDialog(
+                      title: Text("Are you sure..."),
+                      content: Text("...you want to clear the selection"),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                        ),
+                        TextButton(
+                          child: Text("NOT OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                        ),
+                      ],
+                    );
+
+                    return showDialog<bool>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        });
+                  }
+
+                  return Future.value(true);
+                },
+              ),
+              Divider(),
+
+              ///Menu Mode with overriden icon and dropdown buttons
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: DropdownSearch<String>(
+                      validator: (v) => v == null ? "required field" : null,
+                      hint: "Select a country",
+                      mode: Mode.MENU,
+                      dropdownSearchDecoration: InputDecoration(
+                        filled: true,
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF01689A)),
+                        ),
+                      ),
+                      showAsSuffixIcons: true,
+                      clearButtonBuilder: (_) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(
+                          Icons.clear,
+                          size: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                      dropdownButtonBuilder: (_) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Icon(
+                          Icons.arrow_drop_down,
+                          size: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                      showSelectedItem: true,
+                      items: [
+                        "Brazil",
+                        "Italia (Disabled)",
+                        "Tunisia",
+                        'Canada'
+                      ],
+                      label: "Menu mode *",
+                      showClearButton: true,
+                      onChanged: print,
+                      popupItemDisabled: (String s) => s.startsWith('I'),
+                      selectedItem: "Tunisia",
+                    ),
+                  ),
+                  Expanded(
+                      child: TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: "Menu mode *",
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF01689A)),
+                      ),
+                    ),
+                  ))
+                ],
               ),
               Divider(),
               DropdownSelection<UserModel>(
-                searchBoxController: TextEditingController(text: 'Mrs'),
+                searchFieldProps: TextFieldProps(
+                  controller: TextEditingController(text: 'Mrs'),
+                ),
                 mode: Mode.BOTTOM_SHEET,
+                maxHeight: 700,
                 isFilteredOnline: true,
                 showClearButton: true,
                 showSearchBox: true,
@@ -65,24 +158,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                 ),
                 autoValidateMode: AutovalidateMode.onUserInteraction,
-                validator: (UserModel u) =>
-                    u == null ? "user field is required " : null,
+                validator: (u) => u == null ? "user field is required " : null,
                 onFind: (String filter) => getData(filter),
-                onChanged: (UserModel data) {
+                onChanged: (data) {
                   print(data);
                 },
                 dropdownBuilder: _customDropDownExample,
                 popupItemBuilder: _customPopupItemBuilderExample,
+                popupSafeArea: PopupSafeArea(top: true, bottom: true),
               ),
               Divider(),
 
               ///custom itemBuilder and dropDownBuilder
               DropdownSelection<UserModel>(
                 showSelectedItem: true,
-                compareFn: (UserModel i, UserModel s) => i.isEqual(s),
+                compareFn: (i, s) => i.isEqual(s),
                 label: "Person",
                 onFind: (String filter) => getData(filter),
-                onChanged: (UserModel data) {
+                onChanged: (data) {
                   print(data);
                 },
                 dropdownBuilder: _customDropDownExample,
@@ -93,16 +186,25 @@ class _MyHomePageState extends State<MyHomePage> {
               ///BottomSheet Mode with no searchBox
               DropdownSelection<String>(
                 mode: Mode.BOTTOM_SHEET,
-                maxHeight: 300,
-                items: ["Brazil", "Italia", "Tunisia", 'Canada'],
+                items: [
+                  "Brazil",
+                  "Italia",
+                  "Tunisia",
+                  'Canada',
+                  'Zraoua',
+                  'France',
+                  'Belgique'
+                ],
                 label: "Custom BottomShet mode",
                 onChanged: print,
                 selectedItem: "Brazil",
                 showSearchBox: true,
-                searchBoxDecoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                  labelText: "Search a country",
+                searchFieldProps: TextFieldProps(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                    labelText: "Search a country1",
+                  ),
                 ),
                 popupTitle: Container(
                   height: 50,
@@ -133,6 +235,40 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Divider(),
 
+              ///show favorites on top list
+              DropdownSelection<UserModel>(
+                showSelectedItem: true,
+                showSearchBox: true,
+                compareFn: (i, s) => i.isEqual(s),
+                label: "Person with favorite option",
+                onFind: (filter) => getData(filter),
+                onChanged: (data) {
+                  print(data);
+                },
+                dropdownBuilder: _customDropDownExample,
+                popupItemBuilder: _customPopupItemBuilderExample2,
+                showFavoriteItems: true,
+                favoriteItemsAlignment: MainAxisAlignment.start,
+                favoriteItems: (items) {
+                  return items.where((e) => e.name.contains("Mrs")).toList();
+                },
+                favoriteItemBuilder: (context, item) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey[100]),
+                    child: Text(
+                      "${item.name}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.indigo),
+                    ),
+                  );
+                },
+              ),
+              Divider(),
+
               ///merge online and offline data in the same list and set custom max Height
               DropdownSelection<UserModel>(
                 items: [
@@ -151,9 +287,9 @@ class _MyHomePageState extends State<MyHomePage> {
               DropdownSelection<String>(
                 items: ["no action", "confirm in the next dropdown"],
                 label: "open another dropdown programmatically",
-                onChanged: (String v) {
+                onChanged: (v) {
                   if (v == "confirm in the next dropdown") {
-                    _openDropDownProgKey.currentState.openDropDownSearch();
+                    _openDropDownProgKey.currentState?.openDropDownSearch();
                   }
                 },
               ),
@@ -164,32 +300,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 label: "confirm",
                 showSelectedItem: true,
               ),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  RaisedButton(
+                  ElevatedButton(
                       onPressed: () {
-                        _openDropDownProgKey.currentState.openDropDownSearch();
+                        _openDropDownProgKey.currentState?.openDropDownSearch();
                       },
-                      color: Theme.of(context).accentColor,
                       child: Text("Open dropdownSearch")),
-                  RaisedButton(
+                  ElevatedButton(
                       onPressed: () {
                         _openDropDownProgKey.currentState
-                            .changeSelectedItem("No");
+                            ?.changeSelectedItem("No");
                       },
                       child: Text("set to 'NO'")),
-                  RaisedButton(
+                  Material(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _openDropDownProgKey.currentState
+                              ?.changeSelectedItem("Yes");
+                        },
+                        child: Text("set to 'YES'")),
+                  ),
+                  ElevatedButton(
                       onPressed: () {
                         _openDropDownProgKey.currentState
-                            .changeSelectedItem("Yes");
-                      },
-                      child: Text("set to 'YES'")),
-                  RaisedButton(
-                      onPressed: () {
-                        _openDropDownProgKey.currentState
-                            .changeSelectedItem("Blabla");
+                            ?.changeSelectedItem("Blabla");
                       },
                       child: Text("set to 'Blabla'")),
                 ],
@@ -202,9 +339,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _customDropDownExample(
-      BuildContext context, UserModel item, String itemDesignation) {
+      BuildContext context, UserModel? item, String itemDesignation) {
+    if (item == null) {
+      return Container();
+    }
+
     return Container(
-      child: (item?.avatar == null)
+      child: (item.avatar == null)
           ? ListTile(
               contentPadding: EdgeInsets.all(0),
               leading: CircleAvatar(),
@@ -213,8 +354,9 @@ class _MyHomePageState extends State<MyHomePage> {
           : ListTile(
               contentPadding: EdgeInsets.all(0),
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(item.avatar),
-              ),
+                  // this does not work - throws 404 error
+                  // backgroundImage: NetworkImage(item.avatar ?? ''),
+                  ),
               title: Text(item.name),
               subtitle: Text(
                 item.createdAt.toString(),
@@ -239,8 +381,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(item.name),
         subtitle: Text(item.createdAt.toString()),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(item.avatar),
-        ),
+            // this does not work - throws 404 error
+            // backgroundImage: NetworkImage(item.avatar ?? ''),
+            ),
       ),
     );
   }
@@ -261,19 +404,24 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(item.name),
         subtitle: Text(item.createdAt.toString()),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(item.avatar),
-        ),
+            // this does not work - throws 404 error
+            // backgroundImage: NetworkImage(item.avatar ?? ''),
+            ),
       ),
     );
   }
 
   Future<List<UserModel>> getData(filter) async {
     var response = await Dio().get(
-      "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
+      "https://5d85ccfb1e61af001471bf60.mockapi.io/user",
       queryParameters: {"filter": filter},
     );
 
-    var models = UserModel.fromJsonList(response.data);
-    return models;
+    final data = response.data;
+    if (data != null) {
+      return UserModel.fromJsonList(data);
+    }
+
+    return [];
   }
 }
