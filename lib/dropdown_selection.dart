@@ -440,34 +440,25 @@ class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
   }
 
   Future<T?> _openCustomSelectDialog(T? data) {
-  var popupShape = widget.popupShape;
     return showGeneralDialog(
-      barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      transitionDuration: const Duration(milliseconds: 400),
-      barrierColor: widget.popupBarrierColor ?? const Color(0x80000000),
-      context: context,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return SafeArea(
-          top: widget.popupSafeArea.top,
-          bottom: widget.popupSafeArea.bottom,
-          left: widget.popupSafeArea.left,
-          right: widget.popupSafeArea.right,
-          child: Container(
-            color: Colors.transparent,
-            margin: widget.customDialogMargin,
-            child: Material(
-                color: Colors.transparent,
-                child: Container(
-                    decoration: popupShape == null
-                        ? null
-                        : ShapeDecoration(
-                            shape: popupShape, color: Colors.white),
-                    child: _selectDialogInstance(data))),
-          ),
-        );
-      },
-    );
+        barrierDismissible: true,
+        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        transitionDuration: const Duration(milliseconds: 400),
+        barrierColor: widget.popupBarrierColor ?? const Color(0x80000000),
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return SafeArea(
+            top: widget.popupSafeArea.top,
+            bottom: widget.popupSafeArea.bottom,
+            left: widget.popupSafeArea.left,
+            right: widget.popupSafeArea.right,
+            child: Card(
+                margin: widget.customDialogMargin,
+                shape: widget.popupShape,
+                child: _selectDialogInstance(data)),
+          );
+        },
+      );
 }
 
 
