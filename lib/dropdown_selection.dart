@@ -617,6 +617,8 @@ class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
       selectedItem = await _openMenu(data);
     } else if (widget.mode == Mode.BOTTOM_SHEET) {
       selectedItem = await _openBottomSheet(data);
+    } else if (widget.mode == Mode.CUSTOM) {
+      selectedItem = await _openCustomSelectDialog(data);
     } else {
       selectedItem = await _openSelectDialog(data);
     }
