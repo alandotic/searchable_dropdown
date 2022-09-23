@@ -36,7 +36,7 @@ typedef Widget FavoriteItemsBuilder<T>(BuildContext context, T item);
 ///[items] are the original item from [items] or/and [onFind]
 typedef List<T> FavoriteItems<T>(List<T> items);
 
-enum Mode { DIALOG, BOTTOM_SHEET, MENU }
+enum Mode { DIALOG, BOTTOM_SHEET, MENU, CUSTOM }
 
 class DropdownSelection<T> extends StatefulWidget {
   ///DropDownSearch label
@@ -198,6 +198,9 @@ class DropdownSelection<T> extends StatefulWidget {
   /// object that passes all props to search field
   final TextFieldProps? searchFieldProps;
 
+  /// custom dialog margin
+  final EdgeInsets? customDialogMargin;
+
 
   DropdownSelection({
     Key? key,
@@ -251,6 +254,7 @@ class DropdownSelection<T> extends StatefulWidget {
     this.searchBoxStyle,
     this.popupSafeArea = const PopupSafeArea(),
     this.searchFieldProps,
+    this.customDialogMargin
   })
       : assert(!showSelectedItem || T == String || compareFn != null),
         super(key: key);
@@ -434,6 +438,31 @@ class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
       },
     );
   }
+
+  Future<T?> _openCustomSelectDialog(T? data) {
+  return showGeneralDialog(
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    transitionDuration: const Duration(milliseconds: 400),
+    barrierColor: widget.popupBarrierColor ?? const Color(0x80000000),
+    context: context,
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return SafeArea(
+        top: widget.popupSafeArea.top,
+        bottom: widget.popupSafeArea.bottom,
+        left: widget.popupSafeArea.left,
+        right: widget.popupSafeArea.right,
+        child: Container(
+          color: Colors.transparent,
+          margin: widget.customDialogMargin,
+          child: Material(child: _selectDialogInstance(data)),
+        ),
+      );
+    },
+  );
+}
+
+
 
   ///open BottomSheet (Dialog mode)
   Future<T?> _openBottomSheet(T? data) {
