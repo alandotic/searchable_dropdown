@@ -440,6 +440,7 @@ class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
   }
 
   Future<T?> _openCustomSelectDialog(T? data) {
+  var popupShape = widget.popupShape;
   return showGeneralDialog(
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -455,7 +456,14 @@ class DropdownSelectionState<T> extends State<DropdownSelection<T>> {
         child: Container(
           color: Colors.transparent,
           margin: widget.customDialogMargin,
-          child: Material(child: _selectDialogInstance(data)),
+          child: Material(
+              color: Colors.transparent,
+              child: Container(
+                  decoration: popupShape == null
+                      ? null
+                      : ShapeDecoration(
+                          shape: popupShape, color: Colors.white),
+                  child: _selectDialogInstance(data))),
         ),
       );
     },
